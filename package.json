@@ -2,7 +2,7 @@
   "name": "samantha-chatbox",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://<your-github-username>.github.io/<your-repo-name>",
+ "homepage": "https://YOUR_USERNAME.github.io/YOUR_REPO_NAME"
   "dependencies": {
     "framer-motion": "^10.16.1",
     "react": "^18.2.0",
