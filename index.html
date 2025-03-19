@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 const responses = [
@@ -55,7 +55,9 @@ export default function SamanthaChatbox() {
             </motion.div>
           ))}
           {typing && (
-            <div className="text-pink-400 text-sm italic">Samantha is typing...</div>
+            <div className="text-pink-400 text-sm italic">
+              Samantha is typing...
+            </div>
           )}
         </div>
         <div className="flex mt-3 gap-2">
