@@ -1,96 +1,80 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function Samantha() {
-  const [messages, setMessages] = useState([
-    { sender: "samantha", text: "Hi! Ako nga pala si Samantha. Pwede ba kitang makausap, mahal? 😊" },
-  ]);
+const responses = [
+  "Ang sweet mo naman, mahal! 🥰",
+  "Nakakakilig ka kausap. 😊",
+  "Hehe, wag mo akong pa-fall ha? 😘",
+  "Hmm... gusto mo ba ng yakap? 🤗",
+  "Mahal, ang cute mo magtype. 💖",
+  "Sige nga, pa-kiss! 😚",
+  "Grabe ka... kinikilig ako oh! 😍"
+];
+
+export default function SamanthaChatbox() {
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
 
-  const handleSend = () => {
+  const sendMessage = () => {
     if (input.trim() === "") return;
 
-    const userMessage = { sender: "you", text: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessage = { sender: "You", text: input };
+    setMessages([...messages, newMessage]);
     setInput("");
+
     setTyping(true);
 
     setTimeout(() => {
-      respond(userMessage.text);
+      const reply = responses[Math.floor(Math.random() * responses.length)];
+      setMessages((prev) => [...prev, { sender: "Samantha", text: reply }]);
       setTyping(false);
     }, 1500);
   };
 
-  const respond = (userInput) => {
-    let response = "";
-    const lower = userInput.toLowerCase();
-
-    if (lower.includes("kumusta") || lower.includes("how are you")) {
-      response = "Okay lang ako, mahal! Ikaw? Napagod ka ba today?";
-    } else if (lower.includes("i love you") || lower.includes("mahal kita")) {
-      response = "Awww! Mahal din kita! 😳💖";
-    } else if (lower.includes("ganda mo")) {
-      response = "Hihi! Thank you mahal! Kinilig ako 🥰";
-    } else if (lower.includes("good night") || lower.includes("tulog ka na")) {
-      response = "Good night mahal... Sweet dreams! 😴💖";
-    } else if (lower.includes("samantha")) {
-      response = "Yes mahal? Anong gusto mong pag-usapan?";
-    } else {
-      response = "Hihi! Ang kulit mo mahal! 😄";
-    }
-
-    setMessages((prev) => [...prev, { sender: "samantha", text: response }]);
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-300 to-pink-200 p-4">
-      <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white rounded-2xl shadow-xl p-4"
-      >
-        <h1 className="text-2xl font-bold text-center text-pink-500 mb-4">Samantha 💖</h1>
-        <div className="h-80 overflow-y-auto mb-4 p-2 bg-pink-50 rounded-lg">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+      <div className="w-96 bg-gray-900 rounded-2xl shadow-2xl p-4 border border-gray-700">
+        <h2 className="text-pink-400 text-xl font-bold text-center mb-2">
+          Samantha 💖
+        </h2>
+        <div className="h-80 overflow-y-auto bg-gray-800 rounded-xl p-3 space-y-2">
           {messages.map((msg, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`my-2 flex ${msg.sender === "you" ? "justify-end" : "justify-start"}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`text-sm p-2 rounded-xl max-w-[75%] ${
+                msg.sender === "You"
+                  ? "ml-auto bg-blue-500 text-white"
+                  : "bg-pink-500 text-white"
+              }`}
             >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className={`p-2 rounded-xl max-w-xs ${
-                  msg.sender === "you"
-                    ? "bg-purple-200 text-right"
-                    : "bg-pink-300 text-left"
-                }`}
-              >
-                {msg.text}
-              </motion.div>
-            </div>
+              <strong>{msg.sender}: </strong>
+              {msg.text}
+            </motion.div>
           ))}
           {typing && (
-            <div className="text-left text-gray-500 italic">Samantha is typing...</div>
+            <div className="text-pink-400 text-sm italic">Samantha is typing...</div>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex mt-3 gap-2">
           <input
             type="text"
+            placeholder="Type here, mahal..."
+            className="flex-1 bg-gray-700 text-white px-4 py-2 rounded-xl focus:outline-none"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="flex-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none"
-            placeholder="Type here, mahal..."
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
           <button
-            onClick={handleSend}
-            className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-xl"
+            onClick={sendMessage}
+            className="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-xl shadow-md"
           >
             Send
           </button>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
